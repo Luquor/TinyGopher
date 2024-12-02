@@ -1,0 +1,10 @@
+CREATE DATABASE IF NOT EXISTS tinygopher;
+
+USE tinygopher;
+
+CREATE TABLE IF NOT EXISTS shortened_urls (
+    uuid INT AUTO_INCREMENT PRIMARY KEY,
+    original_url TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    expires_at TIMESTAMP NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
