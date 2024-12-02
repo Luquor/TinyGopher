@@ -3,9 +3,9 @@ services:
     image: mariadb:noble
     container_name: tinygopher_mariadb
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_USER: lsignore
-      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_DATABASE: tinygopher
     ports:
       - "3306:3306"
