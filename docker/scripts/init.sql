@@ -3,7 +3,8 @@ CREATE DATABASE IF NOT EXISTS tinygopher;
 USE tinygopher;
 
 CREATE TABLE IF NOT EXISTS shortened_urls (
-    uuid INT AUTO_INCREMENT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    uuid VARCHAR(38)
     original_url TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     expires_at TIMESTAMP NULL
