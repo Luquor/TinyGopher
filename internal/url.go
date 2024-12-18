@@ -5,6 +5,8 @@ import (
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 var URLList []URL
@@ -17,7 +19,19 @@ type URL struct {
 	expires_at   time.Time
 }
 
-func findOrinalURL(uuid string) (string, error) {
+func ShortenURL(originalURL string) {
+	shortURL := URL{
+		ID:           1, // need to implement mutex
+		uuid:         uuid.NewString(),
+		original_url: originalURL,
+		created_at:   time.Now(),
+		expires_at:   time.Now().AddDate(1, 0, 0), // need to take expiration from user
+	}
+
+	URLList = append(URLList, shortURL)
+}
+
+func findOriginalURL(uuid string) (string, error) {
 	for i := 0; i < len(URLList); i++ {
 		if uuid == URLList[i].uuid {
 			return URLList[i].original_url, nil
@@ -34,7 +48,7 @@ func ResolveHandler(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("You must provide an uuid"))
 	}
 
-	originalURL, err := findOrinalURL(uuid)
+	originalURL, err := findOriginalURL(uuid)
 	if err != nil {
 		log.Fatalf("Server failed to get UUID: %v", err)
 	}
