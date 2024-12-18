@@ -1,26 +1,20 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 
-	"github.com/google/uuid"
+	"github.com/luquor/TinyGopher/internal"
 )
 
 func main() {
-	urlDatabase := make(map[string]string)
-	urlId := "/" + uuid.New().String()
+	mux := http.NewServeMux()
 
-	urlDatabase[urlId] = "https://gobyexample.com/maps"
-	fmt.Println(urlDatabase)
+	mux.HandleFunc("/url/", internal.ResolveHandler)
 
-	http.HandleFunc(urlId, func(w http.ResponseWriter, r *http.Request) {
-		if r.Method == "GET" {
-			http.Redirect(w, r, urlDatabase[urlId], http.StatusMovedPermanently)
-		}
-	})
-	err := http.ListenAndServe("localhost:8080", nil)
-	if err != nil {
-		panic(err)
+	port := ":8080"
+	log.Printf("Starting server on %s...\n", port)
+	if err := http.ListenAndServe(port, mux); err != nil {
+		log.Fatalf("Server failed to start: %v\n", err)
 	}
 }
