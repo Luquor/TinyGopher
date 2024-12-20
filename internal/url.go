@@ -50,7 +50,7 @@ func ResolveHandler(w http.ResponseWriter, r *http.Request) {
 
 	originalURL, err := findOriginalURL(uuid)
 	if err != nil {
-		log.Fatalf("Server failed to get UUID: %v", err)
+		log.Printf("Server failed to get UUID: %v", err)
 	}
 
 	http.Redirect(w, r, originalURL, http.StatusFound)
