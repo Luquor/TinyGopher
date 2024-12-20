@@ -19,7 +19,7 @@ type URL struct {
 	expires_at   time.Time
 }
 
-func ShortenURL(originalURL string) {
+func createShortURL(originalURL string) {
 	shortURL := URL{
 		ID:           1, // need to implement mutex
 		uuid:         uuid.NewString(),
@@ -38,6 +38,25 @@ func findOriginalURL(uuid string) (string, error) {
 		}
 	}
 	return "", errors.New("the UUID does not exist")
+}
+
+// The Shorty function handles POST requests to the /short/ endpoint.
+// It retrieves the original URL to shorten from the query parameters (e.g., /?originalUrl=https://gobyexample.com).
+// Future improvements may include parsing the request body as JSON for a more API-centric approach.
+func Shorty(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "method not allowed for this endpoint", http.StatusMethodNotAllowed)
+	}
+
+	originalUrl := r.URL.Query().Get("originalUrl")
+	if originalUrl == "" {
+		http.Error(w, "originalurl parameter is missing", http.StatusBadRequest)
+		return
+	}
+
+	createShortURL(originalUrl)
+	w.Write([]byte("The URL has been shortened"))
+	http.Redirect(w, r, "/", http.StatusFound)
 }
 
 func ResolveHandler(w http.ResponseWriter, r *http.Request) {

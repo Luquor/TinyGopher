@@ -10,6 +10,7 @@ import (
 func main() {
 	mux := http.NewServeMux()
 
+	mux.HandleFunc("/short/", internal.Shorty)
 	mux.HandleFunc("/url/", internal.ResolveHandler)
 
 	port := ":8080"
